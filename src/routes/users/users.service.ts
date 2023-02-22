@@ -65,11 +65,14 @@ export class UsersService {
       data,
     });
 
-    return user;
+    return { ...user, password: undefined };
   }
 
-  findAll() {
-    return this.prisma.user.findMany();
+  async findAll() {
+    const users = await this.prisma.user.findMany();
+    return users.map((user) => {
+      return { ...user, password: undefined };
+    });
   }
 
   async findOne(id: string) {
@@ -83,7 +86,7 @@ export class UsersService {
       throw new NotFoundException('User not found!');
     }
 
-    return user;
+    return { ...user, password: undefined };
   }
 
   async findOneByEmail(email: string) {
@@ -97,7 +100,7 @@ export class UsersService {
       throw new NotFoundException('User not found!');
     }
 
-    return user;
+    return { ...user, password: undefined };
   }
 
   async update(
@@ -139,12 +142,14 @@ export class UsersService {
       phone: phone ? phone : user.phone,
     };
 
-    return await this.prisma.user.update({
+    const updatedUser = await this.prisma.user.update({
       data,
       where: {
         id,
       },
     });
+
+    return { ...updatedUser, password: undefined };
   }
 
   async remove(id: string) {
@@ -156,5 +161,7 @@ export class UsersService {
       data,
       where: { id },
     });
+
+    return true;
   }
 }
