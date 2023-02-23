@@ -8,17 +8,47 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  password     String
-  name         String
-  cpf          String   @unique
-  phone        String
-  dateOfBirth  DateTime
-  isAdvertiser Boolean  @default(false)
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id            String         @id @default(uuid())
+  email         String         @unique
+  password      String
+  name          String
+  cpf           String         @unique
+  phone         String
+  dateOfBirth   DateTime
+  isAdvertiser  Boolean        @default(false)
+  isActive      Boolean        @default(true)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  announcements Announcement[]
 
   @@map("users")
+}
+
+model Announcement {
+  id          String   @id @default(uuid())
+  title       String
+  typeSale    String
+  year        String
+  mileage     String
+  price       String
+  description String
+  typeVehicle String
+  coverImage  String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  images      Image[]
+  User        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String?
+
+  @@map("announcements")
+}
+
+model Image {
+  id             String        @id @default(uuid())
+  url            String
+  Announcement   Announcement? @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  announcementId String?
+
+  @@map("images")
 }

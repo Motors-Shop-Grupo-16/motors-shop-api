@@ -27,7 +27,7 @@ export class LoginService {
 
     const token = jwt.sign(
       {
-        userId: user.id,
+        isAdvertiser: user.isAdvertiser,
       },
       process.env.SECRET_KEY as string,
       {
