@@ -1,4 +1,3 @@
-import { Exclude } from 'class-transformer';
 import {
   IsBoolean,
   IsDateString,
@@ -14,7 +13,6 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  @Exclude()
   password: string;
 
   @IsString()
