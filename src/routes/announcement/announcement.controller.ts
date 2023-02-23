@@ -38,7 +38,6 @@ export class AnnouncementController {
 
   @Get('/advertiser')
   async findAllSeller(@Req() req: Request) {
-    console.log(req);
     return this.announcementService.findAllAdvertiser(req.user.id);
   }
 
