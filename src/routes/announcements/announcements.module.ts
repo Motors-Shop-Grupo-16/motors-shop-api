@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
-import { AnnouncementController } from './announcement.controller';
-import { AnnouncementService } from './announcement.service';
+import { AnnouncementController } from './announcements.controller';
+import { AnnouncementService } from './announcements.service';
 
 @Module({
   controllers: [AnnouncementController],

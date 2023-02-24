@@ -36,7 +36,13 @@ export class UsersService {
     }
   }
 
-  async create(data: CreateUserDto) {
+  async create(body: CreateUserDto) {
+    const { address, ...data } = body;
+
+    const createdAddress = await this.prisma.address.create({
+      data: address,
+    });
+
     const emailExists = await this.prisma.user.findUnique({
       where: {
         email: data.email,
@@ -61,17 +67,30 @@ export class UsersService {
 
     data.dateOfBirth = new Date(data.dateOfBirth);
 
-    const user = await this.prisma.user.create({
-      data,
+    const userCreated = await this.prisma.user.create({
+      data: { ...data, addressId: createdAddress.id },
+    } as any);
+
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: userCreated.id,
+      },
+      include: {
+        Address: true,
+      },
     });
 
-    return { ...user, password: undefined };
+    return { ...user, password: undefined, addressId: undefined };
   }
 
   async findAll() {
-    const users = await this.prisma.user.findMany();
+    const users = await this.prisma.user.findMany({
+      include: {
+        Address: true,
+      },
+    });
     return users.map((user) => {
-      return { ...user, password: undefined };
+      return { ...user, password: undefined, addressId: undefined };
     });
   }
 
@@ -80,19 +99,8 @@ export class UsersService {
       where: {
         id,
       },
-    });
-
-    if (!user || !user.isActive) {
-      throw new NotFoundException('User not found!');
-    }
-
-    return { ...user, password: undefined };
-  }
-
-  async findOneByEmail(email: string) {
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email,
+      include: {
+        Address: true,
       },
     });
 
@@ -100,7 +108,24 @@ export class UsersService {
       throw new NotFoundException('User not found!');
     }
 
-    return { ...user, password: undefined };
+    return { ...user, password: undefined, addressId: undefined };
+  }
+
+  async findOneByEmail(email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        email,
+      },
+      include: {
+        Address: true,
+      },
+    });
+
+    if (!user || !user.isActive) {
+      throw new NotFoundException('User not found!');
+    }
+
+    return { ...user, password: undefined, addressId: undefined };
   }
 
   async update(
@@ -147,9 +172,12 @@ export class UsersService {
       where: {
         id,
       },
+      include: {
+        Address: true,
+      },
     });
 
-    return { ...updatedUser, password: undefined };
+    return { ...updatedUser, password: undefined, addressId: undefined };
   }
 
   async remove(id: string) {

@@ -3,8 +3,8 @@ import { UsersModule } from './routes/users/users.module';
 import { LoginModule } from './routes/login/login.module';
 import { ensureAuthMiddleware } from './middlewares/ensureAuth.middleware';
 import { UsersController } from './routes/users/users.controller';
-import { AnnouncementModule } from './routes/announcement/announcement.module';
-import { AnnouncementController } from './routes/announcement/announcement.controller';
+import { AnnouncementModule } from './routes/announcements/announcements.module';
+import { AnnouncementController } from './routes/announcements/announcements.controller';
 import { ensureIsAdvertiser } from './middlewares/ensureIsAdvertiser.middleware';
 
 @Module({
