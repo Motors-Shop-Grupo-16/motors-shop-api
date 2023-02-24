@@ -20,8 +20,22 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   announcements Announcement[]
+  Address       Address        @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  addressId     String         @unique
 
   @@map("users")
+}
+
+model Address {
+  id         String  @id @default(uuid())
+  cep        String
+  state      String
+  city       String
+  road       String
+  number     String
+  complement String?
+
+  User User?
 }
 
 model Announcement {

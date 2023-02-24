@@ -1,10 +1,16 @@
+import { Type } from 'class-transformer';
+
 import {
   IsBoolean,
   IsDateString,
   IsEmail,
   IsNotEmpty,
+  IsNotEmptyObject,
   IsString,
+  ValidateNested,
 } from 'class-validator';
+
+import { CreateAdressDto } from 'src/routes/addresses/dto/create-address.dto';
 
 export class CreateUserDto {
   @IsEmail()
@@ -33,4 +39,9 @@ export class CreateUserDto {
 
   @IsBoolean()
   isAdvertiser?: boolean;
+
+  @IsNotEmptyObject()
+  @ValidateNested()
+  @Type(() => CreateAdressDto)
+  address: CreateAdressDto;
 }

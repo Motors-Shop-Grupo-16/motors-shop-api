@@ -4,7 +4,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
-import { IAnnouncement, IImage } from './interfaces/announcement.interface';
+import { IAnnouncement, IImage } from './interfaces/announcements.interface';
 
 @Injectable()
 export class AnnouncementService {

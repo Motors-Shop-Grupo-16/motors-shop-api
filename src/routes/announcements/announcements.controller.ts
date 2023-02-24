@@ -10,8 +10,8 @@ import {
   Req,
 } from '@nestjs/common';
 
-import { AnnouncementService } from './announcement.service';
-import { AnnouncementDTO } from './dto/announcement.dto';
+import { AnnouncementService } from './announcements.service';
+import { AnnouncementDTO } from './dto/announcements.dto';
 import { Request } from 'express';
 
 @Controller('announcements')
