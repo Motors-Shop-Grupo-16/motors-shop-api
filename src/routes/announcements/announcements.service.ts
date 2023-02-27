@@ -4,16 +4,19 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
-import { IAnnouncement, IImage } from './interfaces/announcements.interface';
+import { CreateAnnouncementDTO } from './dto/create-announcement.dto';
+import { UpdateAnnouncementDTO } from './dto/update-announcement.dto';
 
 @Injectable()
 export class AnnouncementService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: IAnnouncement, images: IImage[]) {
+  async create(createAnnouncementDTO: CreateAnnouncementDTO, userId: string) {
+    const { images, ...data } = createAnnouncementDTO;
+
     const userExists = await this.prisma.user.findUnique({
       where: {
-        id: data.userId,
+        id: userId,
       },
     });
 
@@ -22,7 +25,7 @@ export class AnnouncementService {
     }
 
     const announcement = await this.prisma.announcement.create({
-      data,
+      data: { ...data, userId: userId },
     });
 
     images.forEach(async (image) => {
@@ -39,7 +42,7 @@ export class AnnouncementService {
       where: { isActive: true, typeSale: 'sale' },
       include: {
         images: { select: { url: true } },
-        User: { select: { name: true } },
+        User: { select: { id: true, name: true } },
       },
     });
 
@@ -55,7 +58,7 @@ export class AnnouncementService {
       },
       include: {
         images: { select: { url: true } },
-        User: { select: { name: true } },
+        User: { select: { id: true, name: true } },
       },
     });
 
@@ -67,15 +70,32 @@ export class AnnouncementService {
   }
 
   async findAllAdvertiser(userId: string) {
-    return this.prisma.announcement.findMany({
+    const userExists = await this.prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!userExists) {
+      throw new NotFoundException('User does not exists!');
+    }
+
+    return await this.prisma.announcement.findMany({
       where: { typeSale: 'sale', userId },
       include: {
         images: { select: { url: true } },
+        User: { select: { id: true, name: true } },
       },
     });
   }
 
-  async update(id: string, data: IAnnouncement, images: IImage[], userId) {
+  async update(
+    id: string,
+    updateAnnouncementDTO: UpdateAnnouncementDTO,
+    userId: string,
+  ) {
+    const { images, ...data } = updateAnnouncementDTO;
+
     const announcementExists = await this.prisma.announcement.findUnique({
       where: {
         id,
@@ -90,15 +110,18 @@ export class AnnouncementService {
       throw new UnauthorizedException('User dont have permission');
     }
 
-    await this.prisma.image.deleteMany({
-      where: { announcementId: announcementExists.id },
-    });
-
-    images.forEach(async (image) => {
-      await this.prisma.image.create({
-        data: { url: image.url, announcementId: announcementExists.id },
+    if (images) {
+      console.log('aoba');
+      await this.prisma.image.deleteMany({
+        where: { announcementId: announcementExists.id },
       });
-    });
+
+      images.forEach(async (image) => {
+        await this.prisma.image.create({
+          data: { url: image.url, announcementId: announcementExists.id },
+        });
+      });
+    }
 
     const announcement = await this.prisma.announcement.update({
       data,
