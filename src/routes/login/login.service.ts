@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/PrismaService';
-import { ILogin } from './interfaces/ILogin';
 import * as bcryptjs from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
+import { PrismaService } from 'src/database/PrismaService';
+import { LoginDTO } from './dto/login-dto';
 
 @Injectable()
 export class LoginService {
   constructor(private prisma: PrismaService) {}
 
-  async login({ email, password }: ILogin) {
+  async login({ email, password }: LoginDTO) {
     const user = await this.prisma.user.findUnique({
       where: {
         email,
