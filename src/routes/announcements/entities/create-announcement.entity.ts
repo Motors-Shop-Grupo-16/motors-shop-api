@@ -5,18 +5,6 @@ export class Image {
   url: string;
 }
 
-export class AnnouncementUser {
-  @ApiProperty({ example: '808c1460-e8f3-470b-81d4-ef5c409595e0' })
-  public id: string;
-
-  @ApiProperty({ example: 'Pedro Rafael' })
-  public name: string;
-
-  @ApiProperty({
-    example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-  })
-  public description: string;
-}
 export class CreateAnnouncement {
   @ApiProperty({ example: 'Fiat Uno' })
   title: string;
@@ -49,6 +37,19 @@ export class CreateAnnouncement {
 
   @ApiProperty()
   isActive: boolean;
+}
+
+export class AnnouncementUser {
+  @ApiProperty({ example: '808c1460-e8f3-470b-81d4-ef5c409595e0' })
+  public id: string;
+
+  @ApiProperty({ example: 'Pedro Rafael' })
+  public name: string;
+
+  @ApiProperty({
+    example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  })
+  public description: string;
 }
 
 export class CreateAnnouncementResponse extends CreateAnnouncement {
