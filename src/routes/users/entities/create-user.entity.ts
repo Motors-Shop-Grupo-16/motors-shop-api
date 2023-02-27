@@ -19,7 +19,12 @@ export class CreateUser {
   phone: string;
 
   @ApiProperty({ example: '2000-02-23' })
-  dateOfBirth: Date | string;
+  dateOfBirth: Date;
+
+  @ApiProperty({
+    example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+  })
+  description: string;
 
   @ApiProperty()
   isAdvertiser?: boolean;
