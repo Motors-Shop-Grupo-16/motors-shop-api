@@ -37,6 +37,10 @@ export class CreateUserDto {
   @IsNotEmpty()
   dateOfBirth: Date | string;
 
+  @IsString()
+  @IsNotEmpty()
+  description: string;
+
   @IsBoolean()
   isAdvertiser?: boolean;
 

@@ -16,7 +16,9 @@ export class CreateAnnouncement {
   @ApiProperty({ example: '12300' })
   price: string;
 
-  @ApiProperty({ example: 'Example for description' })
+  @ApiProperty({
+    example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  })
   description: string;
 
   @ApiProperty({ enum: ['car', 'motorcycle'] })

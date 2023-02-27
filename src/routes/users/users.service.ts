@@ -130,7 +130,15 @@ export class UsersService {
 
   async update(
     id: string,
-    { cpf, dateOfBirth, email, name, password, phone }: UpdateUserDto,
+    {
+      cpf,
+      dateOfBirth,
+      description,
+      email,
+      name,
+      password,
+      phone,
+    }: UpdateUserDto,
   ) {
     const user = await this.findOne(id);
 
@@ -161,6 +169,7 @@ export class UsersService {
     const data = {
       cpf: cpf ? cpf : user.cpf,
       dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : user.dateOfBirth,
+      description: description ? description : user.description,
       email: email ? email : user.email,
       name: name ? name : user.name,
       password: password ? hashSync(password) : user.password,

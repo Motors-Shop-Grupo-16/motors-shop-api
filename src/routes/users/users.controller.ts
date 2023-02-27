@@ -1,17 +1,13 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
+  Controller,
   Delete,
-  Req,
+  Get,
   HttpCode,
+  Patch,
+  Post,
+  Req,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { Request } from 'express';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -19,9 +15,13 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Request } from 'express';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUser, CreateUserResponse } from './entities/create-user.entity';
 import { UserError400 } from './entities/error-user.entity';
 import { UpdateUser, UpdateUserResponse } from './entities/update-user.entity';
+import { UsersService } from './users.service';
 
 @ApiTags('users')
 @Controller('users')
