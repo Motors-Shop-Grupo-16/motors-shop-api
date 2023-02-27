@@ -26,6 +26,10 @@ export class AnnouncementService {
 
     const announcement = await this.prisma.announcement.create({
       data: { ...data, userId: userId },
+      include: {
+        images: { select: { url: true } },
+        User: { select: { id: true, name: true, description: true } },
+      },
     });
 
     images.forEach(async (image) => {
@@ -42,7 +46,7 @@ export class AnnouncementService {
       where: { isActive: true, typeSale: 'sale' },
       include: {
         images: { select: { url: true } },
-        User: { select: { id: true, name: true } },
+        User: { select: { id: true, name: true, description: true } },
       },
     });
 
@@ -58,7 +62,7 @@ export class AnnouncementService {
       },
       include: {
         images: { select: { url: true } },
-        User: { select: { id: true, name: true } },
+        User: { select: { id: true, name: true, description: true } },
       },
     });
 
@@ -84,7 +88,7 @@ export class AnnouncementService {
       where: { typeSale: 'sale', userId },
       include: {
         images: { select: { url: true } },
-        User: { select: { id: true, name: true } },
+        User: { select: { id: true, name: true, description: true } },
       },
     });
   }
@@ -127,6 +131,10 @@ export class AnnouncementService {
       data,
       where: {
         id,
+      },
+      include: {
+        images: { select: { url: true } },
+        User: { select: { id: true, name: true, description: true } },
       },
     });
 
