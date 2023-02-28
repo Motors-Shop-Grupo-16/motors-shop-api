@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 
-import { Addresses } from 'src/routes/addresses/entities/addresses.entity';
+import { Addresses } from '../../addresses/entities/addresses.entity';
 
 export class CreateUser {
   @ApiProperty({ example: 'email@mail.com' })
