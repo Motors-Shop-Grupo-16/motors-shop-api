@@ -3,7 +3,7 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/database/PrismaService';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateAnnouncementDTO } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDTO } from './dto/update-announcement.dto';
 
@@ -115,7 +115,6 @@ export class AnnouncementService {
     }
 
     if (images) {
-      console.log('aoba');
       await this.prisma.image.deleteMany({
         where: { announcementId: announcementExists.id },
       });
