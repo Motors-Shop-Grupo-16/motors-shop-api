@@ -83,17 +83,6 @@ export class UsersService {
     return { ...user, password: undefined, addressId: undefined };
   }
 
-  async findAll() {
-    const users = await this.prisma.user.findMany({
-      include: {
-        Address: true,
-      },
-    });
-    return users.map((user) => {
-      return { ...user, password: undefined, addressId: undefined };
-    });
-  }
-
   async findOne(id: string) {
     const user = await this.prisma.user.findUnique({
       where: {

@@ -36,13 +36,6 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  // @Get()
-  // @ApiBearerAuth()
-  // @ApiOperation({ summary: 'List user' })
-  // findAll(): Promise<CreateUserResponse[]> {
-  //   return this.usersService.findAll();
-  // }
-
   @Get()
   @ApiBearerAuth()
   @ApiOperation({ summary: 'List user' })
