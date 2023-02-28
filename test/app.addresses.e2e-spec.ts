@@ -7,11 +7,7 @@ import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 
 import { validMockedUser } from './mocks/users';
-import {
-  mockedAddress,
-  mockedAddressResponse,
-  mockedUpdateAddressBody,
-} from './mocks/addresses';
+import { mockedAddress, mockedUpdateAddressBody } from './mocks/addresses';
 import { mockedErrorResponse } from './mocks';
 import { mockedValidLoginBody } from './mocks/login';
 
@@ -57,12 +53,12 @@ describe('Integration Tests: Addresses Routes', () => {
         .send(mockedValidLoginBody);
 
       const { body, status } = await request(app.getHttpServer())
-        .post('/login')
-        .send(mockedValidLoginBody)
+        .patch('/addresses')
+        .send(mockedUpdateAddressBody)
         .set('Authorization', `Bearer ${loginBody.token}`);
 
       expect(status).toBe(200);
-      expect(body).toStrictEqual(mockedAddressResponse);
+      expect(body.road).toStrictEqual(mockedUpdateAddressBody.road);
     });
   });
 });

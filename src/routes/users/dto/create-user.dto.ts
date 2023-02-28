@@ -10,7 +10,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-import { CreateAdressDto } from 'src/routes/addresses/dto/create-address.dto';
+import { CreateAdressDto } from '../../addresses/dto/create-address.dto';
 
 export class CreateUserDto {
   @IsEmail()
