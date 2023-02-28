@@ -8,9 +8,17 @@ import { AnnouncementController } from './routes/announcements/announcements.con
 import { ensureIsAdvertiser } from './middlewares/ensureIsAdvertiser.middleware';
 import { AddressesModule } from './routes/addresses/addresses.module';
 import { AddressesController } from './routes/addresses/addresses.controller';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { mailerConfig } from './configs/mailer.config';
 
 @Module({
-  imports: [LoginModule, UsersModule, AddressesModule, AnnouncementModule],
+  imports: [
+    LoginModule,
+    UsersModule,
+    AddressesModule,
+    AnnouncementModule,
+    MailerModule.forRoot(mailerConfig),
+  ],
   controllers: [],
   providers: [],
 })
@@ -18,7 +26,11 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(ensureAuthMiddleware)
-      .exclude({ path: 'users', method: RequestMethod.POST })
+      .exclude(
+        { path: 'users', method: RequestMethod.POST },
+        { path: 'users/recover-password', method: RequestMethod.POST },
+        { path: 'users/recover-password/:token', method: RequestMethod.PATCH },
+      )
       .forRoutes(UsersController, AddressesController);
     consumer
       .apply(ensureAuthMiddleware, ensureIsAdvertiser)

@@ -20,6 +20,7 @@
     "test": "dotenv -e .env.test -- yarn prisma migrate reset --force --skip-seed  && dotenv -e .env.test -- jest --runInBand --verbose"
   },
   "dependencies": {
+    "@nestjs-modules/mailer": "^1.8.1",
     "@nestjs/common": "^9.3.9",
     "@nestjs/core": "^9.3.9",
     "@nestjs/mapped-types": "*",
@@ -37,7 +38,6 @@
     "swagger-ui-express": "^4.6.1"
   },
   "devDependencies": {
-    "jest-extended": "^3.2.4",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
@@ -54,6 +54,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "28.1.3",
+    "jest-extended": "^3.2.4",
     "prettier": "^2.3.2",
     "prisma": "^4.11.0",
     "source-map-support": "^0.5.20",

@@ -3,14 +3,19 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { hashSync } from 'bcryptjs';
+import { randomBytes } from 'crypto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { hashSync } from 'bcryptjs';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private mailerService: MailerService,
+  ) {}
 
   async checkIfEmailExists(email: string) {
     const emailExists = await this.prisma.user.findUnique({
@@ -194,5 +199,75 @@ export class UsersService {
     });
 
     return true;
+  }
+
+  async sendEmailRecoverPassword(email: string) {
+    const userExists = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!userExists) {
+      throw new NotFoundException('Email not found');
+    }
+
+    const tokenExists = await this.prisma.recoverPassword.findUnique({
+      where: { userId: userExists.id },
+    });
+
+    let token = randomBytes(32).toString('hex');
+    if (!tokenExists) {
+      await this.prisma.recoverPassword.create({
+        data: { token, userId: userExists.id },
+      });
+    } else {
+      token = tokenExists.token;
+    }
+
+    const mail = {
+      to: userExists.email,
+      from: 'nobot@motorsshop.com',
+      subject: 'Email de recuperação',
+      template: 'recover-password',
+      context: {
+        token: token,
+      },
+    };
+
+    await this.mailerService.sendMail(mail);
+
+    return {
+      message:
+        'An email has been sent with instructions for resetting your password.',
+    };
+  }
+
+  async recoverPassword(token: string, newPassword: string) {
+    const tokenExists = await this.prisma.recoverPassword.findUnique({
+      where: { token },
+      select: {
+        userId: true,
+      },
+    });
+
+    if (!tokenExists) {
+      throw new NotFoundException('Invalid token');
+    }
+
+    const password = hashSync(newPassword, 10);
+
+    await this.prisma.user.update({
+      where: { id: tokenExists.userId },
+      data: {
+        password: password,
+      },
+    });
+
+    await this.prisma.recoverPassword.delete({
+      where: { token },
+    });
+
+    return {
+      message: 'Successfully recovered password',
+    };
   }
 }

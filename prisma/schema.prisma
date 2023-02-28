@@ -8,21 +8,22 @@ datasource db {
 }
 
 model User {
-  id            String         @id @default(uuid())
-  email         String         @unique
-  password      String
-  name          String
-  cpf           String         @unique
-  phone         String
-  dateOfBirth   DateTime
-  description   String
-  isAdvertiser  Boolean        @default(false)
-  isActive      Boolean        @default(true)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  announcements Announcement[]
-  Address       Address        @relation(fields: [addressId], references: [id], onDelete: Cascade)
-  addressId     String         @unique
+  id              String           @id @default(uuid())
+  email           String           @unique
+  password        String
+  name            String
+  cpf             String           @unique
+  phone           String
+  dateOfBirth     DateTime
+  description     String
+  isAdvertiser    Boolean          @default(false)
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  announcements   Announcement[]
+  Address         Address          @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  addressId       String           @unique
+  RecoverPassword RecoverPassword?
 
   @@map("users")
 }
@@ -37,6 +38,13 @@ model Address {
   complement String?
 
   User User?
+}
+
+model RecoverPassword {
+  id     String @id @default(uuid())
+  token  String @unique
+  User   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String @unique
 }
 
 model Announcement {
