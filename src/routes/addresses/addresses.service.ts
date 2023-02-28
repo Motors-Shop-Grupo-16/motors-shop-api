@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/PrismaService';
 
 import { UpdateAddressDto } from './dto/update-address.dto';
@@ -11,48 +7,18 @@ import { UpdateAddressDto } from './dto/update-address.dto';
 export class AddressesService {
   constructor(private prisma: PrismaService) {}
 
-  async findOne(id: string, userId: string) {
-    const address = await this.prisma.address.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        User: { select: { id: true } },
-      },
-    });
-
-    if (address.User.id !== userId) {
-      throw new UnauthorizedException('Logged user is not owner of address!');
-    }
-
-    if (!address) {
-      throw new NotFoundException('Address not found!');
-    }
-
-    return address;
-  }
-
   async update(
     id: string,
-    userId: string,
     { cep, city, number, road, state, complement }: UpdateAddressDto,
   ) {
-    const address = await this.prisma.address.findUnique({
+    const address = await this.prisma.address.findFirst({
       where: {
-        id,
+        User: { id },
       },
       include: {
         User: { select: { id: true } },
       },
     });
-
-    if (address.User.id !== userId) {
-      throw new UnauthorizedException('Logged user is not owner of address!');
-    }
-
-    if (!address) {
-      throw new NotFoundException('Address not found!');
-    }
 
     const data = {
       cep: cep ? cep : address.cep,
@@ -66,8 +32,9 @@ export class AddressesService {
     const updatedAddress = await this.prisma.address.update({
       data,
       where: {
-        id,
+        id: address.id,
       },
+      include: { User: { select: { id: true } } },
     });
 
     return updatedAddress;
