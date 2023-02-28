@@ -69,7 +69,7 @@ export class UsersService {
 
     const userCreated = await this.prisma.user.create({
       data: { ...data, addressId: createdAddress.id },
-    } as any);
+    });
 
     const user = await this.prisma.user.findUnique({
       where: {
