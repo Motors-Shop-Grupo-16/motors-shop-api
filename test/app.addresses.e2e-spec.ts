@@ -59,7 +59,7 @@ describe('Integration Tests: Addresses Routes', () => {
       const { body, status } = await request(app.getHttpServer())
         .post('/login')
         .send(mockedValidLoginBody)
-        .set('Authorization', loginBody.token);
+        .set('Authorization', `Bearer ${loginBody.token}`);
 
       expect(status).toBe(200);
       expect(body).toStrictEqual(mockedAddressResponse);
