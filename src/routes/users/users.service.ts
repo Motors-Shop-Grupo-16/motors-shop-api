@@ -129,6 +129,12 @@ export class UsersService {
       phone,
     }: UpdateUserDto,
   ) {
+    if (password) {
+      throw new BadRequestException(
+        'The password field is not able to update in this route',
+      );
+    }
+
     const user = await this.findOne(id);
 
     if (email && email != user.email) {
@@ -161,7 +167,6 @@ export class UsersService {
       description: description ? description : user.description,
       email: email ? email : user.email,
       name: name ? name : user.name,
-      password: password ? hashSync(password) : user.password,
       phone: phone ? phone : user.phone,
     };
 
