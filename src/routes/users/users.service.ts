@@ -225,7 +225,7 @@ export class UsersService {
 
     const mail = {
       to: userExists.email,
-      from: 'nobot@motorsshop.com',
+      from: 'imNotABot@motorsshop.com',
       subject: 'Email de recuperação',
       template: 'recover-password',
       context: {
