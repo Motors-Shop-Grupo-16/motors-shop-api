@@ -23,6 +23,10 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  confirmPassword: string;
+
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsString()

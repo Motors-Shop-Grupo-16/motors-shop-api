@@ -9,6 +9,9 @@ export class CreateUser {
   @ApiProperty({ example: '123456' })
   password: string;
 
+  @ApiProperty({ example: '123456' })
+  confirmPassword?: string;
+
   @ApiProperty({ example: 'Pedro Rafael' })
   name: string;
 

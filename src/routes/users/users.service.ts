@@ -42,11 +42,7 @@ export class UsersService {
   }
 
   async create(body: CreateUserDto) {
-    const { address, ...data } = body;
-
-    const createdAddress = await this.prisma.address.create({
-      data: address,
-    });
+    const { address, confirmPassword, ...data } = body;
 
     const emailExists = await this.prisma.user.findUnique({
       where: {
@@ -67,6 +63,16 @@ export class UsersService {
     if (cpfExists) {
       throw new BadRequestException('CPF already registered!');
     }
+
+    if (data.password !== confirmPassword) {
+      throw new BadRequestException(
+        'Password confirmation is different from password',
+      );
+    }
+
+    const createdAddress = await this.prisma.address.create({
+      data: address,
+    });
 
     data.password = hashSync(data.password, 10);
 
