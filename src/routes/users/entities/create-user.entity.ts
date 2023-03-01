@@ -22,7 +22,7 @@ export class CreateUser {
   phone: string;
 
   @ApiProperty({ example: '2000-02-23' })
-  dateOfBirth: Date;
+  dateOfBirth: string;
 
   @ApiProperty({
     example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',

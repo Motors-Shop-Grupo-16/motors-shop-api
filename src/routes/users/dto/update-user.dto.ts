@@ -32,7 +32,7 @@ export class UpdateUserDto {
 
   @IsOptional()
   @IsDateString()
-  dateOfBirth: Date | string;
+  dateOfBirth: string;
 
   @IsOptional()
   @IsString()

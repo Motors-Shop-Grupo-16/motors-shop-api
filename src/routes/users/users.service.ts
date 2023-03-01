@@ -76,7 +76,7 @@ export class UsersService {
 
     data.password = hashSync(data.password, 10);
 
-    data.dateOfBirth = new Date(data.dateOfBirth);
+    // data.dateOfBirth = new Date(data.dateOfBirth);
 
     const userCreated = await this.prisma.user.create({
       data: { ...data, addressId: createdAddress.id },
@@ -174,7 +174,7 @@ export class UsersService {
 
     const data = {
       cpf: cpf ? cpf : user.cpf,
-      dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : user.dateOfBirth,
+      dateOfBirth: dateOfBirth ? dateOfBirth : user.dateOfBirth,
       description: description ? description : user.description,
       email: email ? email : user.email,
       name: name ? name : user.name,

@@ -39,7 +39,7 @@ export class CreateUserDto {
 
   @IsDateString()
   @IsNotEmpty()
-  dateOfBirth: Date | string;
+  dateOfBirth: string;
 
   @IsString()
   @IsNotEmpty()

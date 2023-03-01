@@ -14,7 +14,7 @@ model User {
   name            String
   cpf             String           @unique
   phone           String
-  dateOfBirth     DateTime
+  dateOfBirth     String
   description     String
   isAdvertiser    Boolean          @default(false)
   isActive        Boolean          @default(true)
