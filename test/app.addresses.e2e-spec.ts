@@ -32,7 +32,7 @@ describe('Integration Tests: Addresses Routes', () => {
 
     await prisma.user.create({
       data: { ...validMockedUser, addressId: address.id },
-    });
+    } as any);
 
     await app.init();
   });
@@ -52,13 +52,20 @@ describe('Integration Tests: Addresses Routes', () => {
         .post('/login')
         .send(mockedValidLoginBody);
 
+      const { body: addressBody } = await request(app.getHttpServer())
+        .get('/users')
+        .set('Authorization', `Bearer ${loginBody.token}`);
+
+      addressBody.Address.road = mockedUpdateAddressBody.road;
+      addressBody.Address.User = { id: addressBody.id };
+
       const { body, status } = await request(app.getHttpServer())
         .patch('/addresses')
         .send(mockedUpdateAddressBody)
         .set('Authorization', `Bearer ${loginBody.token}`);
 
       expect(status).toBe(200);
-      expect(body.road).toStrictEqual(mockedUpdateAddressBody.road);
+      expect(body).toStrictEqual(addressBody.Address);
     });
   });
 });
