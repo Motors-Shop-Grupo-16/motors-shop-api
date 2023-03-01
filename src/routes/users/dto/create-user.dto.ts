@@ -23,6 +23,10 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
+  confirmPassword: string;
+
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
   @IsString()
@@ -35,7 +39,7 @@ export class CreateUserDto {
 
   @IsDateString()
   @IsNotEmpty()
-  dateOfBirth: Date | string;
+  dateOfBirth: string;
 
   @IsString()
   @IsNotEmpty()

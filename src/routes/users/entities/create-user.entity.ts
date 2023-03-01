@@ -9,6 +9,9 @@ export class CreateUser {
   @ApiProperty({ example: '123456' })
   password: string;
 
+  @ApiProperty({ example: '123456' })
+  confirmPassword?: string;
+
   @ApiProperty({ example: 'Pedro Rafael' })
   name: string;
 
@@ -19,7 +22,7 @@ export class CreateUser {
   phone: string;
 
   @ApiProperty({ example: '2000-02-23' })
-  dateOfBirth: Date;
+  dateOfBirth: string;
 
   @ApiProperty({
     example: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
