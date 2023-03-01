@@ -34,7 +34,7 @@ export class AddressesService {
       where: {
         id: address.id,
       },
-      include: { User: { select: { id: true } } },
+      include: { User: { select: { name: true } } },
     });
 
     return updatedAddress;

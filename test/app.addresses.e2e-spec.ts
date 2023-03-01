@@ -57,7 +57,7 @@ describe('Integration Tests: Addresses Routes', () => {
         .set('Authorization', `Bearer ${loginBody.token}`);
 
       addressBody.Address.road = mockedUpdateAddressBody.road;
-      addressBody.Address.User = { id: addressBody.id };
+      addressBody.Address.User = { name: addressBody.name };
 
       const { body, status } = await request(app.getHttpServer())
         .patch('/addresses')
