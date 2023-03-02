@@ -2,7 +2,6 @@ import { Type } from 'class-transformer';
 
 import {
   IsBoolean,
-  IsDateString,
   IsEmail,
   IsNotEmpty,
   IsNotEmptyObject,
@@ -37,9 +36,9 @@ export class CreateUserDto {
   @IsNotEmpty()
   phone: string;
 
-  @IsDateString()
+  @IsString()
   @IsNotEmpty()
-  dateOfBirth: string;
+  dateOfBirth: string | Date;
 
   @IsString()
   @IsNotEmpty()
