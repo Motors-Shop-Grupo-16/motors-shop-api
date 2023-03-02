@@ -174,7 +174,7 @@ export class UsersService {
 
     const data = {
       cpf: cpf ? cpf : user.cpf,
-      dateOfBirth: dateOfBirth ? dateOfBirth : user.dateOfBirth,
+      dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : user.dateOfBirth,
       description: description ? description : user.description,
       email: email ? email : user.email,
       name: name ? name : user.name,
