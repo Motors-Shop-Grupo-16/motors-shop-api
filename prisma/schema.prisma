@@ -75,3 +75,12 @@ model Image {
 
   @@map("images")
 }
+
+model comments {
+  id          String    @id @default(uuid())
+  author      String
+  comment     String
+  createdAt   DateTime  @default(now())
+  Announcement   Announcement? @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  announcementId String?
+}
