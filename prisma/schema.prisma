@@ -24,6 +24,7 @@ model User {
   Address         Address          @relation(fields: [addressId], references: [id], onDelete: Cascade)
   addressId       String           @unique
   RecoverPassword RecoverPassword?
+  comments        Comment[]
 
   @@map("users")
 }
@@ -48,7 +49,7 @@ model RecoverPassword {
 }
 
 model Announcement {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
   typeSale    String
   year        String
@@ -57,11 +58,12 @@ model Announcement {
   description String
   typeVehicle String
   coverImage  String
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   images      Image[]
-  User        User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments    Comment[]
+  User        User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String?
 
   @@map("announcements")
@@ -74,4 +76,16 @@ model Image {
   announcementId String?
 
   @@map("images")
+}
+
+model Comment {
+  id             String        @id @default(uuid())
+  content        String
+  createdAt      DateTime      @default(now())
+  Announcement   Announcement? @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  announcementId String?
+  User           User?         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String?
+
+  @@map("coments")
 }

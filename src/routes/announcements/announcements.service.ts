@@ -67,6 +67,14 @@ export class AnnouncementService {
       include: {
         images: { select: { id: true, url: true } },
         User: { select: { id: true, name: true, description: true } },
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            createdAt: true,
+            User: { select: { id: true, name: true } },
+          },
+        },
       },
     });
 
