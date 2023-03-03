@@ -24,18 +24,22 @@ export class AnnouncementService {
       throw new NotFoundException('User does not exists!');
     }
 
-    const announcement = await this.prisma.announcement.create({
+    const createdAnnouncement = await this.prisma.announcement.create({
       data: { ...data, userId: userId },
-      include: {
-        images: { select: { url: true } },
-        User: { select: { id: true, name: true, description: true } },
-      },
     });
 
     images.forEach(async (image) => {
       await this.prisma.image.create({
-        data: { url: image.url, announcementId: announcement.id },
+        data: { url: image.url, announcementId: createdAnnouncement.id },
       });
+    });
+
+    const announcement = await this.prisma.announcement.findUnique({
+      where: { id: createdAnnouncement.id },
+      include: {
+        images: { select: { id: true, url: true } },
+        User: { select: { id: true, name: true, description: true } },
+      },
     });
 
     return { ...announcement, userId: undefined };
