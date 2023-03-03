@@ -18,16 +18,18 @@ import {
 } from '@nestjs/swagger';
 import { Request } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
+import { RecoverPasswordDTO, SendEmailDTO } from './dto/recover-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateUser, CreateUserResponse } from './entities/create-user.entity';
 import { UserError400 } from './entities/error-user.entity';
-import { UpdateUser, UpdateUserResponse } from './entities/update-user.entity';
-import { UsersService } from './users.service';
-import { RecoverPasswordDTO, SendEmailDTO } from './dto/recover-password.dto';
 import {
+  RecoverPasswordEmail,
+  RecoverPasswordEmailResponse,
   SendEmail,
   SendEmailResponse,
 } from './entities/recover-pasword.entity';
+import { UpdateUser, UpdateUserResponse } from './entities/update-user.entity';
+import { UsersService } from './users.service';
 
 @ApiTags('users')
 @Controller('users')
@@ -80,13 +82,13 @@ export class UsersController {
   }
 
   @Patch('/recover-password/:token')
-  @ApiOperation({ summary: 'SendEmail' })
-  @ApiBody({ type: SendEmail })
+  @ApiOperation({ summary: 'Recovery Password' })
+  @ApiBody({ type: RecoverPasswordEmail })
   @ApiResponse({ status: 400, type: UserError400 })
   recoverPassword(
     @Param('token') token: string,
     @Body() recoverPasswordDto: RecoverPasswordDTO,
-  ) {
+  ): Promise<RecoverPasswordEmailResponse> {
     return this.usersService.recoverPassword(
       token,
       recoverPasswordDto.password,

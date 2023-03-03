@@ -18,7 +18,7 @@ export class CommentError404 {
   statusCode: string;
 
   @ApiProperty({
-    example: 'Does not exists',
+    example: 'Comment does not exists!',
   })
   message: string;
 

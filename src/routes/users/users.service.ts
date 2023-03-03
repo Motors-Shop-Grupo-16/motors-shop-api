@@ -1,14 +1,15 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { hashSync } from 'bcryptjs';
-import { randomBytes } from 'crypto';
+import * as jwt from 'jsonwebtoken';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class UsersService {
@@ -220,7 +221,10 @@ export class UsersService {
       where: { userId: userExists.id },
     });
 
-    let token = randomBytes(32).toString('hex');
+    let token = jwt.sign({}, process.env.SECRET_KEY, {
+      expiresIn: '30m',
+    });
+
     if (!tokenExists) {
       await this.prisma.recoverPassword.create({
         data: { token, userId: userExists.id },
@@ -240,7 +244,11 @@ export class UsersService {
       },
     };
 
-    await this.mailerService.sendMail(mail);
+    try {
+      await this.mailerService.sendMail(mail);
+    } catch {
+      throw new BadRequestException('Error sending email');
+    }
 
     return {
       message:
@@ -258,6 +266,21 @@ export class UsersService {
 
     if (!tokenExists) {
       throw new NotFoundException('Invalid token');
+    }
+
+    let deleteToken = false;
+
+    jwt.verify(token, process.env.SECRET_KEY, (err: any, decoded: any) => {
+      if (err || !decoded) {
+        deleteToken = true;
+      }
+    });
+
+    if (deleteToken) {
+      await this.prisma.recoverPassword.delete({
+        where: { token },
+      });
+      throw new UnauthorizedException('Expired token, send another email');
     }
 
     const password = hashSync(newPassword, 10);

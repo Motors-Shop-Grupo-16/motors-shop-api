@@ -34,85 +34,54 @@ export class CommentsService {
 
     const comment = await this.prisma.comment.create({
       data: { ...data, announcementId: announcementId, userId: userId },
-      // include: {
-      //   User: { select: { id: true, name: true } },
-      // },
     });
 
-    // const commentsCreated = await this.prisma.comment.create({
-    //   data: { ...data, commentsId: createdAuthor.id },
-    // } as any);
-
-    // const comments = await this.prisma.comment.findUnique({
-    //   where: {
-    //     id: commentsCreated.id,
-    //   },
-    //   include: {},
-    // });
-
-    return { ...comment, announcementId: undefined, userId: undefined };
+    return { ...comment };
   }
 
-  // async findOne(id: string) {
-  //   const comments = await this.prisma.comment.findUnique({
-  //     where: {
-  //       id,
-  //     },
-  //     include: {
+  async update(body: UpdateCommentDTO, commentId: string, userId: string) {
+    const { ...data } = body;
+    const commentExists = await this.prisma.comment.findUnique({
+      where: {
+        id: commentId,
+      },
+    });
+    if (!commentExists) {
+      throw new NotFoundException('Comment does not exists!');
+    }
 
-  //     },
-  //   });
+    if (commentExists.userId !== userId) {
+      throw new BadRequestException('Comment does not belong to the user');
+    }
 
-  //   if (!comments) {
-  //     throw new NotFoundException('Comments not found!');
-  //   }
+    const updatedComments = await this.prisma.comment.update({
+      data,
+      where: {
+        id: commentId,
+      },
+    });
 
-  //   return { ...comments };
-  // }
+    return { ...updatedComments };
+  }
 
-  // async update(
-  //   id: string,
-  //   {
-  //     author,
-  //     comment,
-  //   }: UpdateCommentsDTO,
-  // ) {
-  //   if (author) {
-  //     throw new BadRequestException(
-  //       'The author of the comment does not exist',
-  //     );
-  //   }
+  async remove(commentId: string, userId: string) {
+    const commentExists = await this.prisma.comment.findUnique({
+      where: {
+        id: commentId,
+      },
+    });
+    if (!commentExists) {
+      throw new NotFoundException('Comment does not exists!');
+    }
 
-  //   const comments = await this.findOne(id);
-
-  //   const data = {
-  //     author: author ? author : comments.author,
-  //     comment: comment ? comment : comments.comment,
-  //   };
-
-  //   const updatedComments = await this.prisma.comment.update({
-  //     data,
-  //     where: {
-  //       id,
-  //     },
-  //     include: {
-
-  //     },
-  //   });
-
-  //   return { ...updatedComments};
-  // }
-
-  // async remove(id: string) {
-  //   await this.findOne(id);
-
-  //   const data = { isActive: false };
-
-  //   await this.prisma.comment.update({
-  //     data,
-  //     where: { id },
-  //   });
-
-  //   return true;
-  // }
+    if (commentExists.userId !== userId) {
+      throw new BadRequestException('Comment does not belong to the user');
+    }
+    await this.prisma.comment.delete({
+      where: {
+        id: commentId,
+      },
+    });
+    return true;
+  }
 }

@@ -1,10 +1,4 @@
-// {
-// 	"message": "An email has been sent with instructions for resetting your password."
-// }
-
 import { ApiProperty } from '@nestjs/swagger';
-
-import { Addresses } from '../../addresses/entities/addresses.entity';
 
 export class SendEmail {
   @ApiProperty({ example: 'email@mail.com' })
