@@ -1,9 +1,7 @@
-/* eslint-disable prettier/prettier */
-import { Module } from "@nestjs/common";
-import { PrismaService } from "src/prisma/prisma.service";
-import { CommentController } from "./comments.controller";
-import { CommentsService } from "./comments.service";
-
+import { Module } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CommentController } from './comments.controller';
+import { CommentsService } from './comments.service';
 
 @Module({
   controllers: [CommentController],

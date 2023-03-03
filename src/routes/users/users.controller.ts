@@ -24,6 +24,10 @@ import { UserError400 } from './entities/error-user.entity';
 import { UpdateUser, UpdateUserResponse } from './entities/update-user.entity';
 import { UsersService } from './users.service';
 import { RecoverPasswordDTO, SendEmailDTO } from './dto/recover-password.dto';
+import {
+  SendEmail,
+  SendEmailResponse,
+} from './entities/recover-pasword.entity';
 
 @ApiTags('users')
 @Controller('users')
@@ -66,11 +70,19 @@ export class UsersController {
   }
 
   @Post('/recover-password')
-  sendEmailRecoverPassword(@Body() recoverPasswordDto: SendEmailDTO) {
+  @ApiOperation({ summary: 'SendEmail' })
+  @ApiBody({ type: SendEmail })
+  @ApiResponse({ status: 400, type: UserError400 })
+  sendEmailRecoverPassword(
+    @Body() recoverPasswordDto: SendEmailDTO,
+  ): Promise<SendEmailResponse> {
     return this.usersService.sendEmailRecoverPassword(recoverPasswordDto.email);
   }
 
   @Patch('/recover-password/:token')
+  @ApiOperation({ summary: 'SendEmail' })
+  @ApiBody({ type: SendEmail })
+  @ApiResponse({ status: 400, type: UserError400 })
   recoverPassword(
     @Param('token') token: string,
     @Body() recoverPasswordDto: RecoverPasswordDTO,

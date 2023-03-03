@@ -10,6 +10,8 @@ import { AddressesModule } from './routes/addresses/addresses.module';
 import { AddressesController } from './routes/addresses/addresses.controller';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { mailerConfig } from './configs/mailer.config';
+import { CommentController } from './routes/comments/comments.controller';
+import { CommentsModule } from './routes/comments/comments.module';
 
 @Module({
   imports: [
@@ -17,6 +19,7 @@ import { mailerConfig } from './configs/mailer.config';
     UsersModule,
     AddressesModule,
     AnnouncementModule,
+    CommentsModule,
     MailerModule.forRoot(mailerConfig),
   ],
   controllers: [],
@@ -31,7 +34,7 @@ export class AppModule {
         { path: 'users/recover-password', method: RequestMethod.POST },
         { path: 'users/recover-password/:token', method: RequestMethod.PATCH },
       )
-      .forRoutes(UsersController, AddressesController);
+      .forRoutes(UsersController, AddressesController, CommentController);
     consumer
       .apply(ensureAuthMiddleware, ensureIsAdvertiser)
       .exclude(
