@@ -52,12 +52,12 @@ describe('Integration Tests: Addresses Routes', () => {
         .post('/login')
         .send(mockedValidLoginBody);
 
-      const { body: addressBody } = await request(app.getHttpServer())
+      const { body: userBody } = await request(app.getHttpServer())
         .get('/users')
         .set('Authorization', `Bearer ${loginBody.token}`);
 
-      addressBody.Address.road = mockedUpdateAddressBody.road;
-      addressBody.Address.User = { name: addressBody.name };
+      userBody.Address.road = mockedUpdateAddressBody.road;
+      userBody.Address.User = { id: userBody.id, name: userBody.name };
 
       const { body, status } = await request(app.getHttpServer())
         .patch('/addresses')
@@ -65,7 +65,7 @@ describe('Integration Tests: Addresses Routes', () => {
         .set('Authorization', `Bearer ${loginBody.token}`);
 
       expect(status).toBe(200);
-      expect(body).toStrictEqual(addressBody.Address);
+      expect(body).toStrictEqual(userBody.Address);
     });
   });
 });

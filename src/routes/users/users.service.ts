@@ -174,7 +174,7 @@ export class UsersService {
 
     const data = {
       cpf: cpf ? cpf : user.cpf,
-      dateOfBirth: dateOfBirth ? dateOfBirth : user.dateOfBirth,
+      dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : user.dateOfBirth,
       description: description ? description : user.description,
       email: email ? email : user.email,
       name: name ? name : user.name,
@@ -231,10 +231,11 @@ export class UsersService {
 
     const mail = {
       to: userExists.email,
-      from: 'imNotABot@motorsshop.com',
+      from: 'contato@motorsshop.com',
       subject: 'Email de recuperação',
       template: 'recover-password',
       context: {
+        baseURL: process.env.BASE_URL,
         token: token,
       },
     };
