@@ -12,8 +12,8 @@ export const mailerConfig: MailerOptions = {
     },
   },
   transport: {
-    host: 'sandbox.smtp.mailtrap.io',
-    port: 2525,
+    host: 'smtp.gmail.com',
+    port: 465,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASSWORD,

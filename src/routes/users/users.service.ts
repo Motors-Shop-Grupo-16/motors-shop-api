@@ -231,10 +231,11 @@ export class UsersService {
 
     const mail = {
       to: userExists.email,
-      from: 'imNotABot@motorsshop.com',
+      from: 'contato@motorsshop.com',
       subject: 'Email de recuperação',
       template: 'recover-password',
       context: {
+        baseURL: process.env.BASE_URL,
         token: token,
       },
     };
