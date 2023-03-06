@@ -47,7 +47,7 @@ export class AnnouncementService {
 
   async findAll() {
     const announcements = await this.prisma.announcement.findMany({
-      where: { isActive: true, typeSale: 'sale' },
+      where: { isActive: true },
       include: {
         images: { select: { url: true } },
         User: { select: { id: true, name: true, description: true } },
