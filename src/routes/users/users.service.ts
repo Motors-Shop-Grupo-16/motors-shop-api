@@ -105,6 +105,10 @@ export class UsersService {
       },
     });
 
+    if (!user) {
+      throw new NotFoundException('User does not exists!');
+    }
+
     return { ...user, password: undefined, addressId: undefined };
   }
 
@@ -117,6 +121,10 @@ export class UsersService {
         Address: true,
       },
     });
+
+    if (!user) {
+      throw new NotFoundException('User does not exists!');
+    }
 
     return { ...user, password: undefined, addressId: undefined };
   }
