@@ -6,7 +6,6 @@ export class CreateComment {
   })
   content: string;
 }
-
 export class CreateCommentResponse extends CreateComment {
   @ApiProperty({ example: '808c1460-e8f3-470b-81d4-ef5c409595e0' })
   id: string;

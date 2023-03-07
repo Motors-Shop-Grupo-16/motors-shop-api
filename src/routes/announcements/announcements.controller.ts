@@ -24,6 +24,7 @@ import { UpdateAnnouncementDTO } from './dto/update-announcement.dto';
 import {
   CreateAnnouncement,
   CreateAnnouncementResponse,
+  FindOneAnnouncementResponse,
 } from './entities/create-announcement.entity';
 import {
   AnnouncementError400,
@@ -74,7 +75,7 @@ export class AnnouncementController {
     status: 404,
     type: AnnouncementError404,
   })
-  async findOne(@Param('id') id: string): Promise<CreateAnnouncementResponse> {
+  async findOne(@Param('id') id: string): Promise<FindOneAnnouncementResponse> {
     return await this.announcementService.findOne(id);
   }
 
