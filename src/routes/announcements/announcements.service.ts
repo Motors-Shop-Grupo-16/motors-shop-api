@@ -100,7 +100,7 @@ export class AnnouncementService {
     }
 
     return await this.prisma.announcement.findMany({
-      where: { typeSale: 'sale', userId },
+      where: { userId },
       include: {
         images: { select: { url: true } },
         User: { select: { id: true, name: true, description: true } },
