@@ -105,10 +105,6 @@ export class UsersService {
       },
     });
 
-    if (!user || !user.isActive) {
-      throw new NotFoundException('User not found!');
-    }
-
     return { ...user, password: undefined, addressId: undefined };
   }
 
@@ -121,10 +117,6 @@ export class UsersService {
         Address: true,
       },
     });
-
-    if (!user || !user.isActive) {
-      throw new NotFoundException('User not found!');
-    }
 
     return { ...user, password: undefined, addressId: undefined };
   }

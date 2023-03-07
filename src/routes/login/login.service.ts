@@ -15,10 +15,6 @@ export class LoginService {
       },
     });
 
-    if (!user || !user.isActive) {
-      throw new BadRequestException('Invalid e-mail or password!');
-    }
-
     const passwordMatches = await bcryptjs.compare(password, user.password);
 
     if (!passwordMatches) {
