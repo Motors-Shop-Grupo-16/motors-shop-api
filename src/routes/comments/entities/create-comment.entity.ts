@@ -13,4 +13,7 @@ export class CreateCommentResponse extends CreateComment {
 
   @ApiProperty({ example: '2023-03-01T23:51:00.587Z' })
   createdAt: Date;
+
+  @ApiProperty({ example: '2023-03-01T23:51:00.587Z' })
+  updatedAt: Date;
 }
