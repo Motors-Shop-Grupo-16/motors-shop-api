@@ -17,7 +17,6 @@ model User {
   dateOfBirth     DateTime
   description     String
   isAdvertiser    Boolean          @default(false)
-  isActive        Boolean          @default(true)
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   announcements   Announcement[]
