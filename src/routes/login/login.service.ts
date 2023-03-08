@@ -13,7 +13,6 @@ export class LoginService {
   constructor(private prisma: PrismaService) {}
 
   async login({ email, password }: LoginDTO) {
-    console.log(email, password);
     const user = await this.prisma.user.findUnique({
       where: {
         email,
