@@ -211,8 +211,6 @@ describe('Users Routes', () => {
         .delete('/users')
         .set('Authorization', `Bearer ${loginBody.token}`);
 
-      console.log(body);
-
       expect(status).toBe(204);
     });
 
@@ -224,8 +222,6 @@ describe('Users Routes', () => {
       const { status, body } = await request(app.getHttpServer())
         .delete('/users')
         .set('Authorization', `Bearer ${loginBody.token}`);
-
-      console.log(body);
 
       expect(status).toBe(401);
       expect(body).toStrictEqual(mockedErrorResponse);

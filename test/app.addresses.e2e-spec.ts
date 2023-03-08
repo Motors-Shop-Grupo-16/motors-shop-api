@@ -6,10 +6,13 @@ import { useContainer } from 'class-validator';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 
-import { validMockedUser } from './mocks/users';
-import { mockedAddress, mockedUpdateAddressBody } from './mocks/addresses';
+import {
+  mockedAddress,
+  mockedAddressLoginBody,
+  mockedAddressUser,
+  mockedUpdateAddressBody,
+} from './mocks/addresses';
 import { mockedErrorResponse } from './mocks';
-import { mockedValidLoginBody } from './mocks/login';
 
 describe('Integration Tests: Addresses Routes', () => {
   let app: INestApplication;
@@ -31,7 +34,7 @@ describe('Integration Tests: Addresses Routes', () => {
     });
 
     await prisma.user.create({
-      data: { ...validMockedUser, addressId: address.id },
+      data: { ...mockedAddressUser, addressId: address.id },
     } as any);
 
     await app.init();
@@ -50,14 +53,7 @@ describe('Integration Tests: Addresses Routes', () => {
     it('Should be able update with success', async () => {
       const { body: loginBody } = await request(app.getHttpServer())
         .post('/login')
-        .send(mockedValidLoginBody);
-
-      const { body: userBody } = await request(app.getHttpServer())
-        .get('/users')
-        .set('Authorization', `Bearer ${loginBody.token}`);
-
-      userBody.Address.road = mockedUpdateAddressBody.road;
-      userBody.Address.User = { id: userBody.id, name: userBody.name };
+        .send(mockedAddressLoginBody);
 
       const { body, status } = await request(app.getHttpServer())
         .patch('/addresses')
@@ -65,7 +61,7 @@ describe('Integration Tests: Addresses Routes', () => {
         .set('Authorization', `Bearer ${loginBody.token}`);
 
       expect(status).toBe(200);
-      expect(body).toStrictEqual(userBody.Address);
+      expect(body.road).toStrictEqual(mockedUpdateAddressBody.road);
     });
   });
 });
