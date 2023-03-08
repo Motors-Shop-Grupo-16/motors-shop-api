@@ -31,6 +31,7 @@ A simple api for the Motors Shop application, containing CRUD of users, announce
 - [Swagger](https://swagger.io/)
 - [JWT](https://jwt.io/)
 - [Bcrypt.JS](https://www.npmjs.com/package/bcryptjs)
+- [JestJS](https://jestjs.io/)
 
 ---
 
@@ -152,8 +153,12 @@ yarn
 
 [Back to the top](#table-of-contents)
 
-### 5.1 <http://127.0.0.1:3000/login>, login
+### 5.1 <https://motors-shop-api.vercel.app/>, Documentation
 
-### 5.2 <http://127.0.0.1:3000/users>, CRUD user
+### 5.2 <https://motors-shop-api.vercel.app/login>, login
 
-### 5.3 <http://127.0.0.1:3000/announcements>, CRUD announcements
+### 5.3 <https://motors-shop-api.vercel.app/users>, CRUD user
+
+### 5.4 <https://motors-shop-api.vercel.app/announcements>, CRUD announcements
+
+### 5.5 <https://motors-shop-api.vercel.app/comments>, CRUD cooments
