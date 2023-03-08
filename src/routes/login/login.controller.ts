@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LoginDTO } from './dto/login-dto';
 import { Login, LoginResponse } from './entities/login.entity';
@@ -11,6 +11,7 @@ export class LoginController {
   constructor(private readonly loginService: LoginService) {}
 
   @Post()
+  @HttpCode(200)
   @ApiOperation({ summary: 'Login' })
   @ApiBody({ type: Login })
   @ApiResponse({

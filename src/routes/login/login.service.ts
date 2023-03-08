@@ -20,7 +20,7 @@ export class LoginService {
     });
 
     if (!user) {
-      throw new NotFoundException('User does not exists!');
+      throw new BadRequestException('Invalid e-mail or password!');
     }
 
     const passwordMatches = await bcryptjs.compare(password, user.password);
