@@ -207,7 +207,7 @@ describe('Users Routes', () => {
         .post('/login')
         .send(mockedValidLoginBody3);
 
-      const { status, body } = await request(app.getHttpServer())
+      const { status } = await request(app.getHttpServer())
         .delete('/users')
         .set('Authorization', `Bearer ${loginBody.token}`);
 
