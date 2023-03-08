@@ -37,4 +37,5 @@ lerna-debug.log*
 
 # dotenv
 .env
-.env.test
+# .env.test
+
