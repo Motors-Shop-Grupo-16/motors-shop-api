@@ -9,7 +9,11 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import { validMockedUser } from './mocks/users';
 import { mockedAddress } from './mocks/addresses';
 import { mockedErrorResponse, mockedRequiredFieldsResponse } from './mocks';
-import { mockedValidLoginBody } from './mocks/login';
+import {
+  mockedInvalidLoginBody,
+  mockedValidLoginBody,
+  mockedToken,
+} from './mocks/login';
 
 describe('Integration Tests: Addresses Routes', () => {
   let app: INestApplication;
@@ -47,25 +51,33 @@ describe('Integration Tests: Addresses Routes', () => {
       expect(body).toStrictEqual(mockedRequiredFieldsResponse);
     });
 
-    // it('Should be able update with success', async () => {
-    //   const { body: loginBody } = await request(app.getHttpServer())
-    //     .post('/login')
-    //     .send(mockedValidLoginBody);
+    it('Should not be able login with invalid e-mail', async () => {
+      const { status, body } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedInvalidLoginBody('e-mail'));
 
-    //   const { body: userBody } = await request(app.getHttpServer())
-    //     .get('/users')
-    //     .set('Authorization', `Bearer ${loginBody.token}`);
+      expect(status).toBe(400);
+      expect(body).toStrictEqual(mockedErrorResponse);
+      expect(body.message).toBe('Invalid e-mail or password!');
+    });
 
-    //   userBody.Address.road = mockedUpdateAddressBody.road;
-    //   userBody.Address.User = { id: userBody.id, name: userBody.name };
+    it('Should not be able login with invalid password', async () => {
+      const { status, body } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedInvalidLoginBody('password'));
 
-    //   const { body, status } = await request(app.getHttpServer())
-    //     .patch('/addresses')
-    //     .send(mockedUpdateAddressBody)
-    //     .set('Authorization', `Bearer ${loginBody.token}`);
+      expect(status).toBe(400);
+      expect(body).toStrictEqual(mockedErrorResponse);
+      expect(body.message).toBe('Invalid e-mail or password!');
+    });
 
-    //   expect(status).toBe(200);
-    //   expect(body).toStrictEqual(userBody.Address);
-    // });
+    it('Should be able login with success', async () => {
+      const { status, body } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedValidLoginBody);
+
+      expect(status).toBe(200);
+      expect(body).toStrictEqual(mockedToken);
+    });
   });
 });
