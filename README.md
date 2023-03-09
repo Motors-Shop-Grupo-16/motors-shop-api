@@ -155,10 +155,10 @@ yarn
 
 ### 5.1 <https://motors-shop-grupo-16.github.io/motors-shop-api/>, Documentation
 
-### 5.2 [https://motors-shop-api.vercel.app/login](https://motors-shop-grupo-16.github.io/motors-shop-api/), login
+### 5.2 https://<i></i>motors-shop-api.vercel.app/login, login
 
-### 5.3 [https://motors-shop-api.vercel.app/users](https://motors-shop-grupo-16.github.io/motors-shop-api/), CRUD user
+### 5.3 https://<i></i>motors-shop-api.vercel.app/users, CRUD user
 
-### 5.4 [https://motors-shop-api.vercel.app/announcements](https://motors-shop-grupo-16.github.io/motors-shop-api/), CRUD announcements
+### 5.4 https://<i></i>motors-shop-api.vercel.app/announcements, CRUD announcements
 
-### 5.5 [https://motors-shop-api.vercel.app/comments](https://motors-shop-grupo-16.github.io/motors-shop-api/), CRUD cooments
+### 5.5 https://<i></i>motors-shop-api.vercel.app/comments, CRUD cooments
