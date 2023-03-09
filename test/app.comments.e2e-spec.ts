@@ -2,26 +2,30 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { useContainer } from 'class-validator';
+import { PrismaService } from '../src/prisma/prisma.service';
 import * as request from 'supertest';
 
 import { AppModule } from '../src/app.module';
 import { mockedErrorResponse, mockedRequiredFieldsResponse } from './mocks';
+import { mockedAddress } from './mocks/addresses';
 import {
-  mockedUserComment,
-  mockedUserCommentLogin,
-  mockedUserNotComment,
-  mockedUserNotCommentLogin,
-  validMockedComment,
-  voidCommentErrorResponse,
+  mockedAnnouncementComment,
+  mockedComment,
+  mockedCommentBody,
+  mockedImageComment,
+  mockedUserComment1,
+  mockedUserComment2,
+  mockedUserCommentLogin1,
+  updateCommentBody,
+  mockedUserCommentLogin2,
 } from './mocks/comments';
 
 describe('Integration Tests: Comments Routes', () => {
   let app: INestApplication;
+  let prisma: PrismaService;
 
-  let commentToken = '';
-  let notcommentToken = '';
-  let commentId = '';
-  let commentCreatedId = '';
+  let announcementId: string;
+  let commentId: string;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -29,132 +33,203 @@ describe('Integration Tests: Comments Routes', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    prisma = app.get<PrismaService>(PrismaService);
 
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
     app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
 
+    const address1 = await prisma.address.create({
+      data: mockedAddress,
+    });
+
+    const user = await prisma.user.create({
+      data: { ...mockedUserComment1, addressId: address1.id },
+    } as any);
+
+    const announcement = await prisma.announcement.create({
+      data: { ...mockedAnnouncementComment, userId: user.id },
+    } as any);
+
+    announcementId = announcement.id;
+
+    await prisma.image.create({
+      data: {
+        ...mockedImageComment,
+        announcementId,
+      },
+    } as any);
+
+    const address2 = await prisma.address.create({
+      data: mockedAddress,
+    });
+
+    await prisma.user.create({
+      data: { ...mockedUserComment2, addressId: address2.id },
+    } as any);
+
     await app.init();
-
-    const user = await request(app.getHttpServer())
-      .post('/users')
-      .send(mockedUserComment);
-    const { body } = await request(app.getHttpServer())
-      .post('/login')
-      .send(mockedUserCommentLogin);
-    commentToken = body.token;
-    commentId = user.body.id;
-
-    await request(app.getHttpServer())
-      .post('/users')
-      .send(mockedUserNotComment);
-    const notcomment = await request(app.getHttpServer())
-      .post('/login')
-      .send(mockedUserNotCommentLogin);
-    notcommentToken = notcomment.body.token;
   });
 
-  describe('POST ---> /users/comments', () => {
+  describe('POST ---> /comments/:announcementId', () => {
     it('Should not be able to create a comment without authorization token', async () => {
       const { status, body } = await request(app.getHttpServer())
-        .post('/comments')
-        .send(validMockedComment);
+        .post(`/comments/${announcementId}`)
+        .send(mockedCommentBody);
       expect(status).toBe(401);
-      expect(body).toStrictEqual(voidCommentErrorResponse);
+      expect(body).toStrictEqual(mockedErrorResponse);
+    });
+
+    it('Should not be able create a comment with invalid announcement', async () => {
+      const { body: loginBody } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedUserCommentLogin1);
+
+      const { status, body } = await request(app.getHttpServer())
+        .post('/comments/1')
+        .send(mockedCommentBody)
+        .set('Authorization', `Bearer ${loginBody.token}`);
+
+      expect(status).toBe(404);
+      expect(body).toStrictEqual(mockedErrorResponse);
+      expect(body.message).toBe('Announcement does not exists!');
+    });
+
+    it('Should not be able create a comment without required fields', async () => {
+      const { body: loginBody } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedUserCommentLogin1);
+
+      const { status, body } = await request(app.getHttpServer())
+        .post(`/comments/${announcementId}`)
+        .send({})
+        .set('Authorization', `Bearer ${loginBody.token}`);
+
+      expect(status).toBe(400);
+      expect(body).toStrictEqual(mockedRequiredFieldsResponse);
+    });
+
+    it('Should be able create a comment with success', async () => {
+      const { body: loginBody } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedUserCommentLogin1);
+
+      const { status, body } = await request(app.getHttpServer())
+        .post(`/comments/${announcementId}`)
+        .send(mockedCommentBody)
+        .set('Authorization', `Bearer ${loginBody.token}`);
+
+      commentId = body.id;
+
+      expect(status).toBe(201);
+      expect(body).toStrictEqual(mockedComment);
     });
   });
 
-  it('All fields have to be filled in', async () => {
-    const data = validMockedComment;
-    const { status, body } = await request(app.getHttpServer())
-      .post('/comments')
-      .send(data)
-      .set('Authorization', `Bearer ${commentToken}`);
-    expect(status).toBe(400);
-    expect(body).toStrictEqual(mockedRequiredFieldsResponse);
+  describe('PATCH ---> /comments/:id', () => {
+    it('Should not be able update without authorization token', async () => {
+      const { status, body } = await request(app.getHttpServer())
+        .patch(`/comments/${commentId}`)
+        .send(updateCommentBody);
+
+      expect(status).toBe(401);
+      expect(body).toStrictEqual(mockedErrorResponse);
+    });
+
+    it('Should not be able update a comment with invalid comment', async () => {
+      const { body: loginBody } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedUserCommentLogin1);
+
+      const { status, body } = await request(app.getHttpServer())
+        .patch('/comments/1')
+        .send(mockedCommentBody)
+        .set('Authorization', `Bearer ${loginBody.token}`);
+
+      expect(status).toBe(404);
+      expect(body).toStrictEqual(mockedErrorResponse);
+      expect(body.message).toBe('Comment does not exists!');
+    });
+
+    it('Should not be able update a comment with not owner permissions', async () => {
+      const { body: loginBody } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedUserCommentLogin2);
+
+      const { status, body } = await request(app.getHttpServer())
+        .patch(`/comments/${commentId}`)
+        .send(mockedCommentBody)
+        .set('Authorization', `Bearer ${loginBody.token}`);
+
+      expect(status).toBe(400);
+      expect(body).toStrictEqual(mockedErrorResponse);
+      expect(body.message).toBe('Comment does not belong to the user');
+    });
+
+    it('Should be able update a comment with success', async () => {
+      const { body: loginBody } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedUserCommentLogin1);
+
+      const { status, body } = await request(app.getHttpServer())
+        .patch(`/comments/${commentId}`)
+        .send(updateCommentBody)
+        .set('Authorization', `Bearer ${loginBody.token}`);
+
+      expect(status).toBe(200);
+      expect(body).toStrictEqual(mockedComment);
+      expect(body.content).toBe(updateCommentBody.content);
+    });
   });
 
-  it('Should be able create with success', async () => {
-    const { status, body } = await request(app.getHttpServer())
-      .post('/comments')
-      .send(validMockedComment)
-      .set('Authorization', `Bearer ${commentToken}`);
-    commentCreatedId = body.id;
-    expect(status).toBe(201);
-    expect(body).toHaveProperty('id');
-    expect(body).toHaveProperty('user');
-    expect(body).toHaveProperty('content');
-  });
-});
+  describe('Delete ---> /comments/:id', () => {
+    it('Should not be able dalete without authorization token', async () => {
+      const { status, body } = await request(app.getHttpServer()).delete(
+        `/comments/${commentId}`,
+      );
 
-describe('GET ---> /users/comments', () => {
-  it('It should not be possible to get a comment with invalid id', async () => {
-    const { status, body } = await request(app.getHttpServer()).get(
-      `/users/comments/${'invalidId'}`,
-    );
-    expect(status).toBe(404);
-    expect(body).toStrictEqual(mockedErrorResponse);
-  });
-});
+      expect(status).toBe(401);
+      expect(body).toStrictEqual(mockedErrorResponse);
+    });
 
-it('Must be able to create a comment', async () => {
-  const { status, body } = await request(app.getHttpServer()).get(
-    `/users/comments/${commentCreatedId}`,
-  );
-  expect(status).toBe(200);
-  expect(body).toHaveProperty('id');
-  expect(body).toHaveProperty('user');
-  expect(body).toHaveProperty('content');
-});
+    it('Should not be able delete a comment with invalid comment', async () => {
+      const { body: loginBody } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedUserCommentLogin1);
 
-it('Must be able to get all comments', async () => {
-  const { status, body } = await request(app.getHttpServer()).get(
-    `/users/comments/`,
-  );
-  expect(status).toBe(200);
-  expect(body[0]).toHaveProperty('id');
-  expect(body[0]).toHaveProperty('user');
-  expect(body[0]).toHaveProperty('content');
-});
+      const { status, body } = await request(app.getHttpServer())
+        .delete('/comments/1')
+        .set('Authorization', `Bearer ${loginBody.token}`);
 
-describe('PATCH ---> /users/comments', () => {
-  it('Should not be able update without authorization token', async () => {
-    const { status, body } = await request(app.getHttpServer())
-      .patch(`/users/comments/${commentCreatedId}`)
-      .send(validMockedComment);
-    expect(status).toBe(401);
-    expect(body).toStrictEqual(mockedErrorResponse);
-  });
-});
+      expect(status).toBe(404);
+      expect(body).toStrictEqual(mockedErrorResponse);
+      expect(body.message).toBe('Comment does not exists!');
+    });
 
-it('Should be able update with success', async () => {
-  const { status } = await request(app.getHttpServer())
-    .post('/users/comments')
-    .send(validMockedComment)
-    .set('Authorization', `Bearer ${commentToken}`);
-  expect(status).toBe(201);
-});
+    it('Should not be able delete a comment with not owner permissions', async () => {
+      const { body: loginBody } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedUserCommentLogin2);
 
-describe('Delete ---> /users/comments', () => {
-  it('It should not be possible to delete the comment with invalid id', async () => {
-    const { status, body } = await request(app.getHttpServer())
-      .delete(`/users/comments/${'invalidId'}`)
-      .set('Authorization', `Bearer ${commentToken}`);
-    expect(status).toBe(404);
-    expect(body).toStrictEqual(mockedErrorResponse);
-  });
+      const { status, body } = await request(app.getHttpServer())
+        .delete(`/comments/${commentId}`)
+        .send(mockedCommentBody)
+        .set('Authorization', `Bearer ${loginBody.token}`);
 
-  it('Must be able to delete comment', async () => {
-    const { status } = await request(app.getHttpServer())
-      .delete(`/users/comments/${commentCreatedId}`)
-      .set('Authorization', `Bearer ${commentToken}`);
-    expect(status).toBe(204);
-  });
+      expect(status).toBe(400);
+      expect(body).toStrictEqual(mockedErrorResponse);
+      expect(body.message).toBe('Comment does not belong to the user');
+    });
 
-  it('It should not be possible to delete a comment', async () => {
-    const { status, body } = await request(app.getHttpServer()).get(
-      `/users/comments/${commentCreatedId}`,
-    );
-    expect(status).toBe(404);
-    expect(body).toStrictEqual(mockedErrorResponse);
+    it('Should be able delete a comment with success', async () => {
+      const { body: loginBody } = await request(app.getHttpServer())
+        .post('/login')
+        .send(mockedUserCommentLogin1);
+
+      const { status } = await request(app.getHttpServer())
+        .delete(`/comments/${commentId}`)
+        .set('Authorization', `Bearer ${loginBody.token}`);
+
+      expect(status).toBe(204);
+    });
   });
 });

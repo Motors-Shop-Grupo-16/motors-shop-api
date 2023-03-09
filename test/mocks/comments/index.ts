@@ -1,72 +1,69 @@
-/* eslint-disable prettier/prettier */
-import 'jest-extended';
+import { hashSync } from 'bcryptjs';
 
-export const validMockedComment = {
-  user: 'teste@gmail.com',
+export const mockedCommentBody = {
   content:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut ipsum vel quam congue malesuada. Proin posuere ligula in odio lobortis, et tempus dui dignissim.',
 };
 
-export const mockedUserComment = {
-  email: 'teste@mail.com',
-  password: '12345',
-  confirmPassword: '12345',
-  name: 'teste',
-  cpf: '12345678978',
-  phone: '11111112222',
-  dateOfBirth: '1459-01-01',
+export const updateCommentBody = {
+  content: 'a',
+};
+
+export const mockedUserComment1 = {
+  email: 'testeComment1@gmail.com',
+  password: hashSync('1234', 10),
+  name: 'teste teste',
+  cpf: '12112112112',
+  phone: '12312312312',
+  dateOfBirth: new Date('1234-12-12'),
   description:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut ipsum vel quam congue malesuada. Proin posuere ligula in odio lobortis, et tempus dui dignissim.',
   isAdvertiser: true,
-  address: {
-    cep: '00000',
-    city: 'juacity',
-    state: 'ce',
-    number: '123',
-    road: 'teste',
-  },
 };
 
-export const mockedUserCommentLogin = {
-  email: 'teste@mail.com',
-  password: '12345',
-};
-
-export const mockedUserNotComment = {
-  email: 'test1@mail.com',
-  password: '12345',
-  confirmPassword: '12345',
-  name: 'teste',
-  cpf: '12356878998',
-  phone: '111111333333',
-  dateOfBirth: '2000-02-11',
+export const mockedUserComment2 = {
+  email: 'testeComment2@gmail.com',
+  password: hashSync('1234', 10),
+  name: 'teste teste',
+  cpf: '12112112113',
+  phone: '12312312312',
+  dateOfBirth: new Date('1234-12-12'),
   description:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut ipsum vel quam congue malesuada. Proin posuere ligula in odio lobortis, et tempus dui dignissim.',
-  isAdvertiser: false,
-  address: {
-    cep: '00000',
-    city: 'juacity',
-    state: 'ce',
-    number: '123',
-    road: 'teste',
-  },
+  isAdvertiser: true,
 };
 
-export const mockedUserNotCommentLogin = {
-  email: 'test@mail.com',
-  password: '12345',
+export const mockedUserCommentLogin1 = {
+  email: 'testeComment1@gmail.com',
+  password: '1234',
+};
+export const mockedUserCommentLogin2 = {
+  email: 'testeComment2@gmail.com',
+  password: '1234',
 };
 
-export const voidComment = {};
+export const mockedAnnouncementComment = {
+  title: 'Teste',
+  typeSale: 'sale',
+  year: '1234',
+  mileage: '123',
+  price: '1.234,00',
+  description:
+    'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem...',
+  typeVehicle: 'car',
+  coverImage:
+    'https://www.chevrolet.com.br/content/dam/chevrolet/mercosur/brazil/portuguese/index/cars/cars-subcontent/04-images/novo-onix-branco-summit.png?imwidth=960',
+};
 
-export const voidCommentErrorResponse = expect.objectContaining({
-  statusCode: expect.any(Number),
-  message: expect.arrayContaining([expect.any(String)]),
-  error: expect.any(String),
+export const mockedImageComment = {
+  url: 'https://www.chevrolet.com.br/content/dam/chevrolet/mercosur/brazil/portuguese/index/cars/cars-subcontent/04-images/novo-onix-branco-summit.png?imwidth=960',
+};
+
+export const mockedComment = expect.objectContaining({
+  id: expect.any(String),
+  content: expect.any(String),
+  createdAt: expect.any(String),
+  updatedAt: expect.any(String),
+  announcementId: expect.any(String),
+  userId: expect.any(String),
 });
-
-export const updateCommentData = {
-  user: 'teste@gmail.com',
-  content:
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ut ipsum vel quam congue malesuada. Proin posuere ligula in odio lobortis, et tempus dui dignissim.',
-};
