@@ -72,6 +72,9 @@ export class CommentUser {
 
   @ApiProperty({ example: 'Pedro Rafael' })
   public name: string;
+
+  @ApiProperty({ example: '(00) 00000-0000' })
+  public phone: string;
 }
 
 export class CommentResponseAnnouncement {
