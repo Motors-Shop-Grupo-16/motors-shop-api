@@ -75,7 +75,7 @@ export class AnnouncementService {
             content: true,
             createdAt: true,
             updatedAt: true,
-            User: { select: { id: true, name: true } },
+            User: { select: { id: true, name: true, phone: true } },
           },
         },
       },
