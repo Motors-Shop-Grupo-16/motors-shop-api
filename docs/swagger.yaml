@@ -1,0 +1,1279 @@
+---
+openapi: 3.0.0
+paths:
+  "/login":
+    post:
+      operationId: LoginController_create
+      summary: Login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Login"
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LoginResponse"
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LoginError400"
+      tags:
+      - login
+  "/users":
+    post:
+      operationId: UsersController_create
+      summary: Create user
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreateUser"
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CreateUserResponse"
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UserError400"
+      tags:
+      - users
+    get:
+      operationId: UsersController_findOne
+      summary: List user
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CreateUserResponse"
+      tags:
+      - users
+      security:
+      - bearer: []
+    patch:
+      operationId: UsersController_update
+      summary: Update user
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UpdateUser"
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UpdateUserResponse"
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UserError400"
+      tags:
+      - users
+      security:
+      - bearer: []
+    delete:
+      operationId: UsersController_remove
+      summary: Delete user
+      parameters: []
+      responses:
+        '204':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: boolean
+      tags:
+      - users
+      security:
+      - bearer: []
+  "/users/recover-password":
+    post:
+      operationId: UsersController_sendEmailRecoverPassword
+      summary: SendEmail
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/SendEmail"
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/SendEmailResponse"
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UserError400"
+      tags:
+      - users
+  "/users/recover-password/{token}":
+    patch:
+      operationId: UsersController_recoverPassword
+      summary: Recovery Password
+      parameters:
+      - name: token
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/RecoverPasswordEmail"
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/RecoverPasswordEmailResponse"
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UserError400"
+      tags:
+      - users
+  "/addresses":
+    patch:
+      operationId: AddressesController_update
+      summary: Update address
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Addresses"
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AddressesResponse"
+      tags:
+      - addresses
+      security:
+      - bearer: []
+  "/announcements":
+    post:
+      operationId: AnnouncementController_create
+      summary: Create announcement
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreateAnnouncement"
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CreateAnnouncementResponse"
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AnnouncementError400"
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AnnouncementError401"
+      tags:
+      - announcements
+      security:
+      - bearer: []
+    get:
+      operationId: AnnouncementController_findAll
+      summary: List all announcements
+      parameters: []
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/CreateAnnouncementResponse"
+      tags:
+      - announcements
+  "/announcements/{id}":
+    get:
+      operationId: AnnouncementController_findOne
+      summary: List one announcement
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/FindOneAnnouncementResponse"
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AnnouncementError404"
+      tags:
+      - announcements
+    patch:
+      operationId: AnnouncementController_update
+      summary: Update announcement
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UpdateAnnouncement"
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UpdateAnnouncementResponse"
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AnnouncementError400"
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AnnouncementError401"
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AnnouncementError404"
+      tags:
+      - announcements
+      security:
+      - bearer: []
+    delete:
+      operationId: AnnouncementController_delete
+      summary: Delete announcement
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AnnouncementError401"
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AnnouncementError404"
+      tags:
+      - announcements
+      security:
+      - bearer: []
+  "/announcements/advertiser/{id}":
+    get:
+      operationId: AnnouncementController_findAllSeller
+      summary: List all announcement advertiser
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/CreateAnnouncementResponse"
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/AnnouncementError404"
+      tags:
+      - announcements
+  "/comments/{id}":
+    post:
+      operationId: CommentController_create
+      summary: Create Comment
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreateComment"
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CreateComment"
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CommentError400"
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CommentError404"
+      tags:
+      - comments
+      security:
+      - bearer: []
+    patch:
+      operationId: CommentController_update
+      summary: Update comment
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UpdateComment"
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UpdateCommentResponse"
+        '400':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CommentError400"
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CommentError404"
+      tags:
+      - comments
+      security:
+      - bearer: []
+    delete:
+      operationId: CommentController_remove
+      summary: Delete comment
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      responses:
+        '204':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '404':
+          description: ''
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/CommentError404"
+      tags:
+      - comments
+      security:
+      - bearer: []
+info:
+  title: Motors Shop
+  description: Api
+  version: '1.0'
+  contact: {}
+tags: []
+servers: []
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          example: email@mail.com
+        password:
+          type: string
+          example: '123456'
+      required:
+      - email
+      - password
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: exampleGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FkdmVydGlzZXIiOnRydWUsImlhdCI6MTY3NzQ1MjYzMCwiZXhwIjoxNjc4MDU3NDMwLCJzdWIiOiI3M2Q1NjU1OS00NjEzLTQ4Y2YtOWNmMS1lYTBkZGQ4Y2UzOTYifQ.i-zlEdg9no4Ocg0L-Dfw3b8GDGBh7-eApKW4794EEBg
+      required:
+      - token
+    LoginError400:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          example: 400
+        message:
+          type: string
+          example:
+          - Invalid e-mail or password!
+        error:
+          type: string
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    Addresses:
+      type: object
+      properties:
+        cep:
+          type: string
+          example: 000000-000
+        state:
+          type: string
+          example: São Paulo
+        city:
+          type: string
+          example: São Paulo
+        road:
+          type: string
+          example: Road one
+        number:
+          type: string
+          example: '1234'
+        complement:
+          type: string
+          example: House
+      required:
+      - cep
+      - state
+      - city
+      - road
+      - number
+      - complement
+    CreateUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: email@mail.com
+        password:
+          type: string
+          example: '123456'
+        confirmPassword:
+          type: string
+          example: '123456'
+        name:
+          type: string
+          example: Pedro Rafael
+        cpf:
+          type: string
+          example: '00000000000'
+        phone:
+          type: string
+          example: "(00) 99999-9999"
+        dateOfBirth:
+          type: object
+          example: '2000-02-23'
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+        isAdvertiser:
+          type: boolean
+        Address:
+          "$ref": "#/components/schemas/Addresses"
+      required:
+      - email
+      - password
+      - name
+      - cpf
+      - phone
+      - dateOfBirth
+      - description
+      - Address
+    CreateUserResponse:
+      type: object
+      properties:
+        email:
+          type: string
+          example: email@mail.com
+        password:
+          type: string
+          example: '123456'
+        confirmPassword:
+          type: string
+          example: '123456'
+        name:
+          type: string
+          example: Pedro Rafael
+        cpf:
+          type: string
+          example: '00000000000'
+        phone:
+          type: string
+          example: "(00) 99999-9999"
+        dateOfBirth:
+          type: object
+          example: '2000-02-23'
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+        isAdvertiser:
+          type: boolean
+        Address:
+          "$ref": "#/components/schemas/Addresses"
+        id:
+          type: string
+          example: '008c1460-e8f3-470b-81d4-ef5c409595e0'
+        createdAt:
+          format: date-time
+          type: string
+          example: '2023-02-26T23:04:00.498Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2023-02-26T23:04:00.498Z'
+      required:
+      - email
+      - password
+      - name
+      - cpf
+      - phone
+      - dateOfBirth
+      - description
+      - Address
+      - id
+      - createdAt
+      - updatedAt
+    UserError400:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          example: 400
+        message:
+          type: string
+          example:
+          - email must be an email
+        error:
+          type: string
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    UpdateUser:
+      type: object
+      properties:
+        email:
+          type: string
+          example: email@mail.com
+        password:
+          type: string
+          example: '123456'
+        confirmPassword:
+          type: string
+          example: '123456'
+        name:
+          type: string
+          example: Pedro Rafael
+        cpf:
+          type: string
+          example: '00000000000'
+        phone:
+          type: string
+          example: "(00) 99999-9999"
+        dateOfBirth:
+          type: object
+          example: '2000-02-23'
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+        isAdvertiser:
+          type: boolean
+        Address:
+          "$ref": "#/components/schemas/Addresses"
+    UpdateUserResponse:
+      type: object
+      properties:
+        email:
+          type: string
+          example: email@mail.com
+        password:
+          type: string
+          example: '123456'
+        confirmPassword:
+          type: string
+          example: '123456'
+        name:
+          type: string
+          example: Pedro Rafael
+        cpf:
+          type: string
+          example: '00000000000'
+        phone:
+          type: string
+          example: "(00) 99999-9999"
+        dateOfBirth:
+          type: object
+          example: '2000-02-23'
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+        isAdvertiser:
+          type: boolean
+        Address:
+          "$ref": "#/components/schemas/Addresses"
+        id:
+          type: string
+          example: '008c1460-e8f3-470b-81d4-ef5c409595e0'
+        createdAt:
+          format: date-time
+          type: string
+          example: '2023-02-26T23:04:00.498Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2023-02-26T23:04:00.498Z'
+      required:
+      - email
+      - password
+      - name
+      - cpf
+      - phone
+      - dateOfBirth
+      - description
+      - Address
+      - id
+      - createdAt
+      - updatedAt
+    SendEmail:
+      type: object
+      properties:
+        email:
+          type: string
+          example: email@mail.com
+      required:
+      - email
+    SendEmailResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: An email has been sent with instructions for resetting your password.
+      required:
+      - message
+    RecoverPasswordEmail:
+      type: object
+      properties:
+        password:
+          type: string
+          example: '123456'
+      required:
+      - password
+    RecoverPasswordEmailResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Successfully recovered password
+      required:
+      - message
+    AddressesResponse:
+      type: object
+      properties:
+        cep:
+          type: string
+          example: 000000-000
+        state:
+          type: string
+          example: São Paulo
+        city:
+          type: string
+          example: São Paulo
+        road:
+          type: string
+          example: Road one
+        number:
+          type: string
+          example: '1234'
+        complement:
+          type: string
+          example: House
+        id:
+          type: string
+          example: 808c1460-e8f3-470b-81d4-ef5c409595e0
+      required:
+      - cep
+      - state
+      - city
+      - road
+      - number
+      - complement
+      - id
+    Image:
+      type: object
+      properties:
+        url:
+          type: string
+      required:
+      - url
+    CreateAnnouncement:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Fiat Uno
+        typeSale:
+          type: string
+          enum:
+          - sale
+          - auction
+        year:
+          type: string
+          example: '2020'
+        mileage:
+          type: string
+          example: '10000'
+        price:
+          type: string
+          example: '12300'
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        typeVehicle:
+          type: string
+          enum:
+          - car
+          - motorcycle
+        coverImage:
+          type: string
+          example: www.image.jpg
+        images:
+          example:
+            url: www.image.jpg
+          type: array
+          items:
+            "$ref": "#/components/schemas/Image"
+        isActive:
+          type: boolean
+      required:
+      - title
+      - typeSale
+      - year
+      - mileage
+      - price
+      - description
+      - typeVehicle
+      - coverImage
+      - isActive
+    AnnouncementUser:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 808c1460-e8f3-470b-81d4-ef5c409595e0
+        name:
+          type: string
+          example: Pedro Rafael
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      required:
+      - id
+      - name
+      - description
+    CreateAnnouncementResponse:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Fiat Uno
+        typeSale:
+          type: string
+          enum:
+          - sale
+          - auction
+        year:
+          type: string
+          example: '2020'
+        mileage:
+          type: string
+          example: '10000'
+        price:
+          type: string
+          example: '12300'
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        typeVehicle:
+          type: string
+          enum:
+          - car
+          - motorcycle
+        coverImage:
+          type: string
+          example: www.image.jpg
+        images:
+          example:
+            url: www.image.jpg
+          type: array
+          items:
+            "$ref": "#/components/schemas/Image"
+        isActive:
+          type: boolean
+        id:
+          type: string
+          example: 808c1460-e8f3-470b-81d4-ef5c409595e0
+        createdAt:
+          format: date-time
+          type: string
+          example: '2023-02-26T23:04:00.498Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2023-02-26T23:04:00.498Z'
+        User:
+          "$ref": "#/components/schemas/AnnouncementUser"
+      required:
+      - title
+      - typeSale
+      - year
+      - mileage
+      - price
+      - description
+      - typeVehicle
+      - coverImage
+      - isActive
+      - id
+      - createdAt
+      - updatedAt
+      - User
+    AnnouncementError400:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          example: 400
+        message:
+          type: string
+          example:
+          - 'typeSale must be one of the following values: sale, auction'
+        error:
+          type: string
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    AnnouncementError401:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          example: 401
+        message:
+          type: string
+          example: Not an advertise
+        error:
+          type: string
+          example: Unauthorized
+      required:
+      - statusCode
+      - message
+      - error
+    CommentUser:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 808c1460-e8f3-470b-81d4-ef5c409595e0
+        name:
+          type: string
+          example: Pedro Rafael
+        phone:
+          type: string
+          example: "(00) 00000-0000"
+      required:
+      - id
+      - name
+      - phone
+    CommentResponseAnnouncement:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 808c1460-e8f3-470b-81d4-ef5c409595e0
+        createdAt:
+          format: date-time
+          type: string
+          example: '2023-03-01T23:51:00.587Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2023-03-01T23:51:00.587Z'
+        User:
+          "$ref": "#/components/schemas/CommentUser"
+      required:
+      - id
+      - createdAt
+      - updatedAt
+      - User
+    FindOneAnnouncementResponse:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Fiat Uno
+        typeSale:
+          type: string
+          enum:
+          - sale
+          - auction
+        year:
+          type: string
+          example: '2020'
+        mileage:
+          type: string
+          example: '10000'
+        price:
+          type: string
+          example: '12300'
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        typeVehicle:
+          type: string
+          enum:
+          - car
+          - motorcycle
+        coverImage:
+          type: string
+          example: www.image.jpg
+        images:
+          example:
+            url: www.image.jpg
+          type: array
+          items:
+            "$ref": "#/components/schemas/Image"
+        isActive:
+          type: boolean
+        id:
+          type: string
+          example: 808c1460-e8f3-470b-81d4-ef5c409595e0
+        createdAt:
+          format: date-time
+          type: string
+          example: '2023-02-26T23:04:00.498Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2023-02-26T23:04:00.498Z'
+        User:
+          "$ref": "#/components/schemas/AnnouncementUser"
+        comments:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CommentResponseAnnouncement"
+      required:
+      - title
+      - typeSale
+      - year
+      - mileage
+      - price
+      - description
+      - typeVehicle
+      - coverImage
+      - isActive
+      - id
+      - createdAt
+      - updatedAt
+      - User
+      - comments
+    AnnouncementError404:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          example: 404
+        message:
+          type: string
+          example: Does not exists
+        error:
+          type: string
+          example: Not found
+      required:
+      - statusCode
+      - message
+      - error
+    UpdateAnnouncement:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Fiat Uno
+        typeSale:
+          type: string
+          enum:
+          - sale
+          - auction
+        year:
+          type: string
+          example: '2020'
+        mileage:
+          type: string
+          example: '10000'
+        price:
+          type: string
+          example: '12300'
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        typeVehicle:
+          type: string
+          enum:
+          - car
+          - motorcycle
+        coverImage:
+          type: string
+          example: www.image.jpg
+        images:
+          example:
+            url: www.image.jpg
+          type: array
+          items:
+            "$ref": "#/components/schemas/Image"
+        isActive:
+          type: boolean
+    UpdateAnnouncementResponse:
+      type: object
+      properties:
+        title:
+          type: string
+          example: Fiat Uno
+        typeSale:
+          type: string
+          enum:
+          - sale
+          - auction
+        year:
+          type: string
+          example: '2020'
+        mileage:
+          type: string
+          example: '10000'
+        price:
+          type: string
+          example: '12300'
+        description:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        typeVehicle:
+          type: string
+          enum:
+          - car
+          - motorcycle
+        coverImage:
+          type: string
+          example: www.image.jpg
+        images:
+          example:
+            url: www.image.jpg
+          type: array
+          items:
+            "$ref": "#/components/schemas/Image"
+        isActive:
+          type: boolean
+        id:
+          type: string
+          example: 808c1460-e8f3-470b-81d4-ef5c409595e0
+        createdAt:
+          format: date-time
+          type: string
+          example: '2023-02-26T23:04:00.498Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2023-02-26T23:04:00.498Z'
+        User:
+          "$ref": "#/components/schemas/AnnouncementUser"
+      required:
+      - title
+      - typeSale
+      - year
+      - mileage
+      - price
+      - description
+      - typeVehicle
+      - coverImage
+      - isActive
+      - id
+      - createdAt
+      - updatedAt
+      - User
+    CreateComment:
+      type: object
+      properties:
+        content:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur dipiscing elit.
+      required:
+      - content
+    CommentError400:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          example: 400
+        message:
+          type: string
+          example:
+          - content must be a string
+        error:
+          type: string
+          example: Bad Request
+      required:
+      - statusCode
+      - message
+      - error
+    CommentError404:
+      type: object
+      properties:
+        statusCode:
+          type: string
+          example: 404
+        message:
+          type: string
+          example: Comment does not exists!
+        error:
+          type: string
+          example: Not found
+      required:
+      - statusCode
+      - message
+      - error
+    UpdateComment:
+      type: object
+      properties:
+        content:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur dipiscing elit.
+    UpdateCommentResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          example: Lorem ipsum dolor sit amet, consectetur dipiscing elit.
+        id:
+          type: string
+          example: 808c1460-e8f3-470b-81d4-ef5c409595e0
+        createdAt:
+          format: date-time
+          type: string
+          example: '2023-03-01T23:51:00.587Z'
+        updatedAt:
+          format: date-time
+          type: string
+          example: '2023-03-01T23:51:00.587Z'
+      required:
+      - content
+      - id
+      - createdAt
+      - updatedAt
